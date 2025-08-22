@@ -1,0 +1,9 @@
+1.I just relaxed that files in a git repo vary from 
+branch to branch. Some branches contain files some other
+do not have. I just found this out while switching
+from my master branch to my feature branch after I 
+pushed changes to the master on github.
+
+2.To pull changes from a particular branch run:
+    git pull <remote> <branch>
+     remote:repo url
