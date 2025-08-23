@@ -12,9 +12,10 @@ const db = new sqlite3.Database(DB_NAME, (err) => {
 
 let sql = `CREATE TABLE IF NOT EXISTS users(
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    firstname TEXT NOT NULL,
-    lastname TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE
+    firstname VARCHAR(50) NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(50)
 );`;
 
 db.run(sql, handleDBOperation);

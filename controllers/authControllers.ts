@@ -1,14 +1,15 @@
 import { Response, Request } from "express";
-import { userSchema } from "../middlewares/validators.js";
+import { signUpSchema } from "../middlewares/validators.js";
 import { insertUser } from "../utils/queryFunctions/insertFunctions.js";
 import { getUserByEmail } from "../utils/queryFunctions/getFunctions.js";
 
 export async function signUpController(req: Request, res: Response) {
-  const { firstname, lastname, email } = req.body;
-  const { error } = userSchema.validate({
+  const { firstname, lastname, email, password } = req.body;
+  const { error } = signUpSchema.validate({
     firstname,
     lastname,
     email,
+    password
   });
 
   if (error)
@@ -22,7 +23,7 @@ export async function signUpController(req: Request, res: Response) {
       .status(401)
       .json({ success: false, message: "User already exists with this email" });
 
-  insertUser(firstname, lastname, email);
+  insertUser(firstname, lastname, email,password);
   return res
     .status(201)
     .json({ success: true, message: "testing" });
