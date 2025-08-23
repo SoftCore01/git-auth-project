@@ -5,4 +5,3 @@ export function handleDBOperation(err: Error | null) {
   }
   console.log("Operation successful");
 }
-
