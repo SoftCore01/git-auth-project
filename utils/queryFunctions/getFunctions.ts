@@ -1,4 +1,5 @@
 import db from "../../connect.js";
+import { User } from "../../types/userType.js";
 import { queries } from "../constants/queriesConstants.js";
 
 function getOperation(sql: string, ...values: any[]) {
@@ -14,7 +15,7 @@ function getOperation(sql: string, ...values: any[]) {
 export async function getUserByEmail(email: string) {
   try {
     const response = await getOperation(queries.get.userByEmail, email);
-    return response;
+    return response as User;
   } catch (error) {
     console.log(error);
   }

@@ -1,8 +1,9 @@
 import { Response, Request } from "express";
-import { signUpSchema } from "../middlewares/validators.js";
+import { loginSchema, signUpSchema } from "../middlewares/validators.js";
 import { insertUser } from "../utils/queryFunctions/insertFunctions.js";
 import { getUserByEmail } from "../utils/queryFunctions/getFunctions.js";
-import { doHash } from "../utils/hashFunctions.js";
+import { doHash, doHashValidation } from "../utils/hashFunctions.js";
+import jwt from "jsonwebtoken";
 
 export async function signUpController(req: Request, res: Response) {
   const { firstname, lastname, email, password } = req.body;
@@ -26,4 +27,42 @@ export async function signUpController(req: Request, res: Response) {
   const hashedPassword = await doHash(password, parseInt(process.env.SALTVAL));
   insertUser(firstname, lastname, email, hashedPassword);
   return res.status(201).json({ success: true, message: "testing" });
+}
+
+export async function loginController(req: Request, res: Response) {
+  const { email, password } = req.body;
+  const { error } = loginSchema.validate({
+    email,
+    password,
+  });
+  if (error)
+    return res
+      .status(400)
+      .json({ success: false, message: error.details[0].message });
+
+  const existingUser = await getUserByEmail(email);
+  if (!existingUser)
+    return res
+      .status(401)
+      .json({ success: false, message: "User does not exist" });
+
+  const isCorrectPassword = await doHashValidation(
+    password,
+    existingUser.password
+  );
+  if (!isCorrectPassword)
+    return res
+      .status(401)
+      .json({ success: false, message: "Incorrect password" });
+  
+  const accessToken = jwt.sign(
+    { id: existingUser.user_id },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "15m" }
+  );
+  return res.status(200).json({
+    success: true,
+    message: `Welcome ${existingUser.firstname}`,
+    token: accessToken,
+  });
 }

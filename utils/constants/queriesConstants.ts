@@ -3,6 +3,6 @@ export const queries = {
     user: "INSERT INTO users(firstname, lastname, email, password) VALUES(?,?,?, ?)",
   },
   get: {
-    userByEmail: 'SELECT email FROM users WHERE email=?'
-  }
+    userByEmail: "SELECT * FROM users WHERE email=?",
+  },
 };
