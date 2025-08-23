@@ -7,3 +7,18 @@ pushed changes to the master on github.
 2.To pull changes from a particular branch run:
     git pull <remote> <branch>
      remote:repo url
+
+3. Break down project using the following framework:
+    a.Each feature is built on a single branch
+    b.Each branch should be made from commits
+    c.Each commit should be made after buildin
+      a little portion of the feature without causing
+      the application from crashing.
+    
+4.To rename a branch:
+  locally: git branch -m <old-branch-name> <new-branch-name>
+  remote:  git push origin -u <new-branch-name>
+
+5.To delete a branch:
+  locally: git branch -d <branch-name>
+  remote: git push origin --delete <branch-name>
