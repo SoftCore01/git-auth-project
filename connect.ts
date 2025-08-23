@@ -15,7 +15,7 @@ let sql = `CREATE TABLE IF NOT EXISTS users(
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(50)
+    password TEXT NOT NULL
 );`;
 
 db.run(sql, handleDBOperation);

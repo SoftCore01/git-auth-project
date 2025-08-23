@@ -12,5 +12,5 @@ function insertOperation(sql: string, ...values: any[]) {
 }
 
 export function insertUser(firstname: string, lastname: string, email: string, password: string) {
-  insertOperation(queries.insert.user, firstname, lastname, email);
+  insertOperation(queries.insert.user, firstname, lastname, email, password);
 }
