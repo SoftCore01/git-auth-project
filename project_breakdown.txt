@@ -1,6 +1,7 @@
 Features:
-0.Signup
+0.Signup - done
 1.Login
+  
 2.Logout
 3.Create account
 4.Delete account

@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import db from "../../connect.js";
 import { queries } from "../constants/queriesConstants.js";
 
