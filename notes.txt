@@ -22,3 +22,6 @@ pushed changes to the master on github.
 5.To delete a branch:
   locally: git branch -d <branch-name>
   remote: git push origin --delete <branch-name>
+
+6.To remove a file from the git history/stop it from being tracked
+  git rm --cache <filename>
