@@ -1,6 +1,8 @@
 import sqlite3 from "sqlite3";
 import { DB_NAME } from "./utils/configs.js";
 import { handleDBOperation } from "./utils/helperFunctions.js";
+import { usersModel } from "./models/usersModels.js";
+import { postsModel } from "./models/postsModels.js";
 
 const db = new sqlite3.Database(DB_NAME, (err) => {
   if (err) {
@@ -10,14 +12,8 @@ const db = new sqlite3.Database(DB_NAME, (err) => {
   console.log("Database connected successfully");
 });
 
-let sql = `CREATE TABLE IF NOT EXISTS users(
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    firstname VARCHAR(50) NOT NULL,
-    lastname VARCHAR(50) NOT NULL,
-    email VARCHAR(50) NOT NULL UNIQUE,
-    password TEXT NOT NULL
-);`;
 
-db.run(sql, handleDBOperation);
 
+db.run(usersModel, handleDBOperation);
+db.run(postsModel, handleDBOperation);
 export default db;
