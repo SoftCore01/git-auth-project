@@ -7,3 +7,10 @@ declare namespace NodeJS {
     SALTVAL: string;
   }
 }
+
+
+declare namespace Express {
+  interface Request {
+    user?: string | JwtPayload | undefined;
+  }
+}
