@@ -1,6 +1,6 @@
 import express, { json, urlencoded } from 'express'
 import { PORT } from './utils/configs.js'
-import routers from './routers/index.js'
+import routers from './routes/index.js'
 const app = express()
 
 app.use(
