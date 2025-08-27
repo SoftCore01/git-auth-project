@@ -19,3 +19,13 @@ export const loginSchema = Joi.object({
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/)
     .required(),
 });
+
+export const postSchema = Joi.object({
+  title: Joi.string().min(5).max(50),
+  details: Joi.string().min(5),
+});
+
+export const updatePostSchema = Joi.object({
+  title: Joi.string().min(5).max(50).optional(),
+  details: Joi.string().min(5).optional(),
+});
