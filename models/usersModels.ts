@@ -3,5 +3,6 @@ export const usersModel = `CREATE TABLE IF NOT EXISTS users(
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    refreshToken VARCHAR(255)
 );`;

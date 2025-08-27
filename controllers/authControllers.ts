@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { loginSchema, signUpSchema } from "../middlewares/validators.js";
-import { insertUser } from "../utils/queryFunctions/insertFunctions.js";
+import { insertRefreshToken, insertUser } from "../utils/queryFunctions/insertFunctions.js";
 import { getUserByEmail } from "../utils/queryFunctions/getFunctions.js";
 import { doHash, doHashValidation } from "../utils/hashFunctions.js";
 import jwt from "jsonwebtoken";
@@ -71,12 +71,23 @@ export async function loginController(req: Request, res: Response) {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "15m" }
     );
+    const refreshToken = jwt.sign(
+      { id: existingUser.user_id },
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    insertRefreshToken(existingUser.user_id, refreshToken)
     return res.status(200).json({
       success: true,
       message: `Welcome ${existingUser.firstname}`,
-      token: accessToken,
+      tokens: { accessToken, refreshToken },
     });
+
   } catch (error) {
     console.log(error);
   }
+}
+
+export function refreshAccessTokenController(req: Request, res: Response) {
+  
 }

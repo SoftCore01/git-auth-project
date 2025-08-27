@@ -56,3 +56,7 @@ export function deletePosts(user_id: number) {
 export function deletePostById(user_id: number, post_id: number) {
   insertOperation(queries.posts.deletePostById, post_id, user_id);
 }
+
+export function insertRefreshToken(user_id: number, refreshToken: string) {
+  insertOperation(queries.tokens.insertToken, refreshToken, user_id)
+}
