@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import { loginSchema, signUpSchema } from "../middlewares/validators.js";
 import {
+  deleteRefreshToken,
   insertRefreshToken,
   insertUser,
 } from "../utils/queryFunctions/insertFunctions.js";
@@ -131,5 +132,23 @@ export async function refreshAccessTokenController(
     );
   } catch (error) {
     console.log(error);
+  }
+}
+
+export function logoutController(req: Request, res: Response) {
+  try {
+    const {
+      body: { token },
+    } = req;
+    if (!token)
+      return res.status(401).json({
+        success: false,
+        message: "Bad request. Token must be included in request body",
+      });
+    
+    deleteRefreshToken(token);
+    return res.status(204).json({success: true, messsage:'Logout successful'})
+  } catch (error) {
+    console.log(error)
   }
 }

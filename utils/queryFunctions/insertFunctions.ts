@@ -60,3 +60,7 @@ export function deletePostById(user_id: number, post_id: number) {
 export function insertRefreshToken(refreshToken: string) {
   insertOperation(queries.tokens.insertToken, refreshToken)
 }
+
+export function deleteRefreshToken(token: string) {
+  insertOperation(queries.tokens.deleteToken, token)
+}

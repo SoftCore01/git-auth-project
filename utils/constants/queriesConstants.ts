@@ -18,5 +18,6 @@ export const queries = {
   tokens: {
     insertToken: "INSERT INTO refreshTokens(token) VALUES(?)",
     retrieveToken: "SELECT token FROM refreshTokens",
+    deleteToken : "DELETE FROM refreshTokens WHERE token = ?"
   },
 };
