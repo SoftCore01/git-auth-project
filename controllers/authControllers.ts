@@ -1,9 +1,16 @@
 import { Response, Request } from "express";
 import { loginSchema, signUpSchema } from "../middlewares/validators.js";
-import { insertRefreshToken, insertUser } from "../utils/queryFunctions/insertFunctions.js";
-import { getUserByEmail } from "../utils/queryFunctions/getFunctions.js";
+import {
+  insertRefreshToken,
+  insertUser,
+} from "../utils/queryFunctions/insertFunctions.js";
+import {
+  getRefreshToken,
+  getUserByEmail,
+} from "../utils/queryFunctions/getFunctions.js";
 import { doHash, doHashValidation } from "../utils/hashFunctions.js";
 import jwt from "jsonwebtoken";
+import { generateAccessToken } from "../utils/helperFunctions.js";
 
 export async function signUpController(req: Request, res: Response) {
   try {
@@ -66,28 +73,63 @@ export async function loginController(req: Request, res: Response) {
         .status(401)
         .json({ success: false, message: "Incorrect password" });
 
-    const accessToken = jwt.sign(
-      { id: existingUser.user_id },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" }
-    );
+    const accessToken = generateAccessToken(existingUser.user_id);
     const refreshToken = jwt.sign(
       { id: existingUser.user_id },
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    insertRefreshToken(existingUser.user_id, refreshToken)
+    insertRefreshToken(refreshToken);
     return res.status(200).json({
       success: true,
       message: `Welcome ${existingUser.firstname}`,
       tokens: { accessToken, refreshToken },
     });
-
   } catch (error) {
     console.log(error);
   }
 }
 
-export function refreshAccessTokenController(req: Request, res: Response) {
-  
+export async function refreshAccessTokenController(
+  req: Request,
+  res: Response
+) {
+  try {
+    const {
+      body: { token },
+    } = req;
+    if (!token)
+      return res.status(401).json({
+        success: false,
+        message: "Bad request. Token must be included in request body",
+      });
+
+    const userRefreshToken = await getRefreshToken();
+    if (!userRefreshToken?.includes(token))
+      return res.status(403).json({
+        success: false,
+        message: "Invalid refresh token",
+      });
+
+    jwt.verify(
+      token,
+      process.env.REFRESH_TOKEN_SECRET,
+      (
+        err: jwt.VerifyErrors | null,
+        user: string | jwt.JwtPayload | undefined
+      ) => {
+        if (err) return res.status(403);
+        if (user) {
+          const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+          return res.status(200).json({
+            success: true,
+            message: "Token refresh successful",
+            accessToken: accessToken,
+          });
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 }

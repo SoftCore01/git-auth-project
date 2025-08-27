@@ -16,6 +16,7 @@ export const queries = {
     deletePosts: "DELETE FROM posts WHERE user_id = ?",
   },
   tokens: {
-    insertToken: "UPDATE users SET refreshToken = ? WHERE user_id = ?",
+    insertToken: "INSERT INTO refreshTokens(token) VALUES(?)",
+    retrieveToken: "SELECT token FROM refreshTokens",
   },
 };

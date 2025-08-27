@@ -52,3 +52,18 @@ export async function getPostById(user_id: number, post_id: number) {
     console.log(error);
   }
 }
+
+export async function getRefreshToken() {
+  type Token = {
+    token:string
+  }
+  try {
+    const response = await getAll(
+      queries.tokens.retrieveToken
+    ) as Token[];
+    const tokens = response.map(token=> token.token)
+    return tokens
+  } catch (error) {
+    console.log(error);
+  }
+}
